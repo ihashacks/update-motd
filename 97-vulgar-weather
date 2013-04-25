@@ -1,0 +1,17 @@
+#!/bin/sh
+
+
+# look up our IP
+[ -x /usr/bin/curl ] && IP=$(/usr/bin/curl -s ifconfig.me)
+
+# turn that IP into a location
+[ -x /usr/bin/geoiplookup ] && CITYSTATE=$(/usr/bin/geoiplookup -f /usr/share/GeoIP/GeoLiteCity.dat $IP |\
+		awk -F, ' { print $4","$3 } ' |\
+		sed -e 's/^[[:space:]]//' -e 's/\ /+/g' -e 's/,/%2c/g')
+
+[ -x /usr/bin/links ] && WEATHER=$(/usr/bin/links -dump "http://thefuckingweather.com/?where=$CITYSTATE" |\
+		sed -n '/IT.S/{p;q;}' |\
+		sed -e 's/^[[:space:]]*//' |\
+		tr A-Z a-z)
+
+echo "  The weather... $WEATHER"
