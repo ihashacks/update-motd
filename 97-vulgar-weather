@@ -9,7 +9,7 @@
         awk -F, ' { print $5","$4 } ' |\
         sed -e 's/^[[:space:]]//' -e 's/\ /+/g' -e 's/,/%2c/g')
 
-[ -x /usr/bin/links ] && WEATHER=$(/usr/bin/links -dump "http://thefuckingweather.com/?where=$CITYSTATE" |\
+[ -x /usr/bin/lynx ] && WEATHER=$(/usr/bin/lynx -dump "http://thefuckingweather.com/?where=$CITYSTATE" |\
         sed -n '/IT.S/{p;q;}' |\
         sed -e 's/^[[:space:]]*//' |\
         tr A-Z a-z)
