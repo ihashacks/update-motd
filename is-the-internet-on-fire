@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+import dns.resolver
+
+# the data we want is in a TXT record in DNS
+answers = dns.resolver.query('istheinternetonfire.com', 'TXT')
+
+# loop through all TXT records in case multiple are ever added
+for rdata in answers:
+  for txt_string in rdata.strings:
+    # strip off the short response before the URLs
+    fire_status = txt_string.split(". ")
+    print '  Is the internet on fire? ...', fire_status[0]
+
+    # pop out the short response so we can pull out the URLs
+    fire_status.pop(0)
+
+    # put this back in a string and split it on spaces
+    fires = str(fire_status[0]).split(" ")
+
+    # loop through each fire
+    for fire in fires:
+        print '   ', fire
